@@ -21,6 +21,7 @@ help:
 	$(info Please use \`make <target>' where <target> is one of:)
 	$(info .	nb				to start jupyter notebooks)
 	$(info .	get-data		to retrieve consumptions from the database)
+	$(info .	prototypes		to obtain weekday prototypes)
 
 all: help
 
@@ -29,6 +30,9 @@ nb:
 
 get-data:
 	python $(SRC_DIR)$(PREPROCESSING)$(OS_SEP)complete_dataframe.py || $(ERROR_MSG)
+
+prototypes:
+	python $(SRC_DIR)$(PREPROCESSING)$(OS_SEP)weekday_prototypes.py || $(ERROR_MSG)
 
 output:
 	$(RM) $(OUT_DIR)
