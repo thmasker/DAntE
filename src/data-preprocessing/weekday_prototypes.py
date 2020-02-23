@@ -50,5 +50,6 @@ if __name__ == '__main__':
 		bar.next()
 	
 	bar.finish()
-
+	
+	prototypes.reset_index(drop=True, inplace=True)
 	prototypes.to_pickle(OUT_PATH + '/prototypes.zip', compression='zip')
