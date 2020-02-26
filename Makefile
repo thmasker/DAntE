@@ -19,7 +19,7 @@ ERROR_MSG = @echo ERROR: Check you activated the virtual environment
 
 help:
 	$(info Please use \`make <target>' where <target> is one of:)
-	$(info .	nb				to start jupyter notebooks)
+	$(info .	nb			to start jupyter notebooks)
 	$(info .	get-data		to retrieve consumptions from the database)
 	$(info .	prototypes		to obtain weekday prototypes)
 

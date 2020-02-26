@@ -71,6 +71,7 @@ if __name__ == '__main__':
         consumptions = np.asarray(df['consumption'])
         consumptions = consumptions.reshape((n_days, 24)) # Reshape each day with its 24 consumptions
         consumptions = pd.DataFrame(consumptions, index=np.arange(n_days), columns=np.arange(24))
+        consumptions.columns = consumptions.columns.astype(str)
 
         days = df['day'].drop_duplicates().tolist()
 
@@ -80,6 +81,7 @@ if __name__ == '__main__':
 
         consumptions = pd.concat([pd.DataFrame({'day': days, 'weekday': weekdays}), consumptions], axis=1)
         consumptions = consumptions.set_index(['day'])
+        consumptions.insert(0, 'building_id', counter_id)
         consumptions.to_pickle(OUT_PATH + 'consumptions_byday/counter_' + str(counter_id) + '_byDay.zip', compression='zip')
 
         bar.next()
