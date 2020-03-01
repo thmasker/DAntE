@@ -50,12 +50,12 @@ if __name__ == '__main__':
 			df.loc[:, 'mean'] = df.loc[:, '0':].mean(axis=1)	# Calculate daily consumption mean
 			
 			df_a = df.loc[df['mean'] >= threshold]	# Select active days
-			mean_proto = mean_proto.append(get_prototype(df_a, counter_id, 6, True, type='mean'))
-			std_proto = std_proto.append(get_prototype(df_a, counter_id, 6, True, type='std'))
+			mean_proto = mean_proto.append(get_prototype(df_a, counter_id, i, True, type='mean'))
+			std_proto = std_proto.append(get_prototype(df_a, counter_id, i, True, type='std'))
 			
 			df_i = df.loc[df['mean'] < threshold]	# Select inactive days
-			mean_proto = mean_proto.append(get_prototype(df_i, counter_id, 6, False, type='mean'))
-			std_proto = std_proto.append(get_prototype(df_i, counter_id, 6, False, type='std'))
+			mean_proto = mean_proto.append(get_prototype(df_i, counter_id, i, False, type='mean'))
+			std_proto = std_proto.append(get_prototype(df_i, counter_id, i, False, type='std'))
 
 		bar.next()
 	
