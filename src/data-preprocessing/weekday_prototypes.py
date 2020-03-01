@@ -9,10 +9,12 @@ OUT_PATH = 'C:/Users/thmas/OneDrive - Universidad de Castilla-La Mancha/Informá
 
 
 def get_threshold(df: pd.DataFrame) -> float:
-    df.loc[:, 'mean'] = df.loc[:, '0':].mean(axis=1)	# Calculate daily consumption mean
-    mean, std = df['mean'].mean(), df['mean'].std()
-    
-    return mean + 2 * std	# Calculate threshold based on sundays
+	df.loc[:, 'mean'] = df.loc[:, '0':].mean(axis=1)	# Calculate daily consumption mean
+	mean, std = df['mean'].mean(), df['mean'].std()
+
+	del df['mean']
+
+	return mean + 2 * std	# Calculate threshold based on sundays
 
 
 def get_prototype(df: pd.DataFrame, counter_id: int, weekday: int, active: bool, type: str = 'mean') -> pd.DataFrame:
@@ -25,8 +27,6 @@ def get_prototype(df: pd.DataFrame, counter_id: int, weekday: int, active: bool,
 	proto.insert(0, 'active', active)
 	proto.insert(0, 'weekday', weekday)
 	proto.insert(0, 'building_id', counter_id)
-
-	del proto['mean']
 
 	return proto
 
@@ -49,11 +49,11 @@ if __name__ == '__main__':
 			df = clean_df[clean_df['weekday'] == i]
 			df.loc[:, 'mean'] = df.loc[:, '0':].mean(axis=1)	# Calculate daily consumption mean
 			
-			df_a = df.loc[df['mean'] >= threshold]	# Select active days
+			df_a = df.loc[df['mean'] > threshold]	# Select active days
 			mean_proto = mean_proto.append(get_prototype(df_a, counter_id, i, True, type='mean'))
 			std_proto = std_proto.append(get_prototype(df_a, counter_id, i, True, type='std'))
 			
-			df_i = df.loc[df['mean'] < threshold]	# Select inactive days
+			df_i = df.loc[df['mean'] <= threshold]	# Select inactive days
 			mean_proto = mean_proto.append(get_prototype(df_i, counter_id, i, False, type='mean'))
 			std_proto = std_proto.append(get_prototype(df_i, counter_id, i, False, type='std'))
 
@@ -61,5 +61,7 @@ if __name__ == '__main__':
 	
 	bar.finish()
 	
+	del mean_proto['mean']
+	del std_proto['mean']
 	mean_proto.reset_index(drop=True, inplace=True), std_proto.reset_index(drop=True, inplace=True)
 	mean_proto.to_pickle(OUT_PATH + 'prototypesMEAN.zip', compression='zip'), std_proto.to_pickle(OUT_PATH + 'prototypesSTD.zip', compression='zip')
