@@ -4,7 +4,6 @@ import pickle
 from progress.bar import Bar
 
 
-CONS_PATH = 'C:/Users/thmas/OneDrive - Universidad de Castilla-La Mancha/Informática/TFG/out/consumptions_byday/'
 OUT_PATH = 'C:/Users/thmas/OneDrive - Universidad de Castilla-La Mancha/Informática/TFG/out/'
 
 
@@ -34,10 +33,12 @@ def get_prototype(df: pd.DataFrame, counter_id: int, weekday: int, active: bool,
 if __name__ == '__main__':
 	counters = pickle.load(open(OUT_PATH + 'counter_ids.pickle', 'rb'))
 	
+	raw = pd.read_pickle(OUT_PATH + 'raw_consumptions.zip')
+
 	bar = Bar('Collecting data', max=len(counters))
 	mean_proto, std_proto = pd.DataFrame(), pd.DataFrame()
 	for counter_id in counters:
-		raw_df = pd.read_pickle(CONS_PATH + 'counter_' + str(counter_id) + '_byDay.zip')
+		raw_df = raw[raw['building_id'] == counter_id]	# Select current building
 		
 		clean_df = raw_df.dropna()
 		sundays = clean_df[clean_df['weekday'] == 6]	# Select Sundays
