@@ -6,7 +6,6 @@ from progress.bar import Bar
 
 
 OUT_PATH = 'C:/Users/thmas/OneDrive - Universidad de Castilla-La Mancha/Informática/TFG/out/'
-CONS_PATH = OUT_PATH + 'consumptions_byday/'
 PROTOS_PATH = OUT_PATH + 'prototypesMEAN.zip'
 
 
@@ -41,12 +40,15 @@ if __name__ == '__main__':
 	protos = pd.read_pickle(PROTOS_PATH)
 	counters = pickle.load(open(OUT_PATH + 'counter_ids.pickle', 'rb'))
 
+	raw_df = pd.read_pickle(OUT_PATH + 'raw_consumptions.zip')
+
 	bar = Bar('Rebuilding data', max=len(counters))
+	clean_consumptions = pd.DataFrame()
 	for counter_id in counters:
 		mean_proto = protos[protos['building_id'] == counter_id]
 		mean_proto.reset_index(drop=True, inplace=True)
 
-		df = pd.read_pickle(CONS_PATH + 'counter_' + str(counter_id) + '_byDay.zip')
+		df = raw_df[raw_df['building_id'] == counter_id]
 
 		threshold = get_threshold(df[df['weekday'] == 6])
 
@@ -75,7 +77,9 @@ if __name__ == '__main__':
 			else:
 				df.loc[day, 'active'] = False
 
-		df.to_pickle(OUT_PATH + 'consumptions/counter_' + str(counter_id) + '_byDay.zip')
+		clean_consumptions = clean_consumptions.append(df)
 
 		bar.next()
 	bar.finish()
+
+	clean_consumptions.to_pickle(OUT_PATH + 'clean_consumptions.zip')
