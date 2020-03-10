@@ -57,6 +57,7 @@ if __name__ == '__main__':
     counters = pickle.load(open(OUT_PATH + 'counter_ids.pickle', 'rb'))
 
     bar = Bar('Collecting data', max=len(counters))
+    consumptions = pd.DataFrame()
     for counter_id in counters:
         # Fix hours to have 24h days
         start = firstHour(db, counter_id).replace(hour=5)
@@ -68,10 +69,10 @@ if __name__ == '__main__':
         df = calcDay(df)
 
         n_days = len(df['day']) // 24
-        consumptions = np.asarray(df['consumption'])
-        consumptions = consumptions.reshape((n_days, 24)) # Reshape each day with its 24 consumptions
-        consumptions = pd.DataFrame(consumptions, index=np.arange(n_days), columns=np.arange(24))
-        consumptions.columns = consumptions.columns.astype(str)
+        cons = np.asarray(df['consumption'])
+        cons = cons.reshape((n_days, 24)) # Reshape each day with its 24 consumptions
+        cons = pd.DataFrame(cons, index=np.arange(n_days), columns=np.arange(24))
+        cons.columns = cons.columns.astype(str)
 
         days = df['day'].drop_duplicates().tolist()
 
@@ -79,11 +80,12 @@ if __name__ == '__main__':
         for day in days:
             weekdays.append(day.weekday())
 
-        consumptions = pd.concat([pd.DataFrame({'day': days, 'weekday': weekdays}), consumptions], axis=1)
-        consumptions = consumptions.set_index(['day'])
-        consumptions.insert(0, 'building_id', counter_id)
-        consumptions.to_pickle(OUT_PATH + 'consumptions_byday/counter_' + str(counter_id) + '_byDay.zip', compression='zip')
+        cons = pd.concat([pd.DataFrame({'day': days, 'weekday': weekdays}), cons], axis=1)
+        cons = cons.set_index(['day'])
+        cons.insert(0, 'building_id', counter_id)
 
+        consumptions = consumptions.append(cons)
         bar.next()
 
     bar.finish()
+    consumptions.to_pickle(OUT_PATH + 'raw_consumptions.zip', compression='zip')
