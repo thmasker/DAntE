@@ -13,7 +13,7 @@ endif
 ENV = pytfg
 OUT_DIR = .$(OS_SEP)out
 SRC_DIR = .$(OS_SEP)src
-PREPROCESSING = .$(OS_SEP)data-preprocessing
+PREPROCESSING = .$(OS_SEP)data_preprocessing
 JUPYTER_DIR = .$(OS_SEP)notebook
 ERROR_MSG = @echo ERROR: Check you activated the virtual environment
 
