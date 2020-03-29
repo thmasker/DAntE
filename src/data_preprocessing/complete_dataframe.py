@@ -71,10 +71,8 @@ if __name__ == '__main__':
         n_days = len(df['day']) // 24
         cons_array = np.asarray(df['consumption'])
         cons_array = cons_array.reshape((n_days, 24))   # Reshape each day with its 24 consumptions
-        cons = pd.DataFrame(index=np.arange(n_days), columns=['consumptions'])
 
-        for i in range(len(cons_array)):
-            cons.iloc[i, 0] = cons_array[i]
+        cons = pd.DataFrame({'consumptions': cons_array.tolist()})
 
         days = df['day'].drop_duplicates().tolist()
 
