@@ -22,9 +22,8 @@ def dropNan(df: pd.DataFrame) -> pd.DataFrame:
 
 def get_threshold(df: pd.DataFrame) -> float:
     df['daily'] = df['consumptions'].apply(np.sum)
-    mean, std = df['daily'].mean(), df['daily'].std() # Get daily consumptions mean and standard deviation
 
-    return mean + 2 * std   # Calculate threshold based on sundays
+    return df['daily'].mean()
 
 
 def get_prototype(df: pd.DataFrame, counter_id: int, weekday: int, active: bool, type: str = 'mean') -> pd.DataFrame:
@@ -35,10 +34,10 @@ def get_prototype(df: pd.DataFrame, counter_id: int, weekday: int, active: bool,
         for j in range(df.shape[0]):
             i_consumptions.append(df['consumptions'].iloc[j][i])    # i_consumptions correspond to the ith hour
 
-            if type == 'std':
-                cons.append(np.std(i_consumptions))
-            else:
-                cons.append(np.mean(i_consumptions))
+        if type == 'std':
+            cons.append(np.std(i_consumptions))
+        else:
+            cons.append(np.mean(i_consumptions))
 
     return pd.DataFrame({'building_id': counter_id, 'weekday': weekday, 'active': active, 'consumptions': [cons]})
 
