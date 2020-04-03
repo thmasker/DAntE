@@ -51,6 +51,7 @@ def calcDay(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+# Remove negative and its correlated large positive consumptions
 def cleanData(df: pd.DataFrame) -> pd.DataFrame:
     consumptions = df['consumptions']
 
@@ -61,15 +62,15 @@ def cleanData(df: pd.DataFrame) -> pd.DataFrame:
         cons_clean = cons[~negatives]
         clean_mean, clean_std = np.mean(cons_clean), np.std(cons_clean)
 
-        positives = np.greater(cons, clean_std * 3 + clean_mean)
+        positives = np.greater(cons, clean_std * 3 + clean_mean)    # Big positives
         invalids = positives + negatives
 
         cons[invalids] = np.nan
 
         consumptions[row] = cons
 
-        df['consumptions'] = consumptions
-        return df
+    df['consumptions'] = consumptions
+    return df
 
 
 if __name__ == '__main__':
@@ -105,10 +106,9 @@ if __name__ == '__main__':
         cons = cons.set_index(['day'])
         cons.insert(0, 'building_id', counter_id)
 
-        cons = cleanData(cons)
+        consumptions = consumptions.append(cleanData(cons))
 
-        consumptions = consumptions.append(cons)
         bar.next()
-
     bar.finish()
+
     consumptions.to_pickle(OUT_PATH + 'raw_consumptions.zip', compression='zip')
