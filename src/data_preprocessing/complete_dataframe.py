@@ -51,27 +51,6 @@ def calcDay(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def cleanData(df: pd.DataFrame) -> pd.DataFrame:
-    consumptions = df['consumptions']
-
-    for row in range(df.shape[0]):
-        cons = np.asarray(consumptions[row])
-        negatives = np.less(cons, 0)    # Negative values
-
-        cons_clean = cons[~negatives]
-        clean_mean, clean_std = np.mean(cons_clean), np.std(cons_clean)
-
-        positives = np.greater(cons, clean_std * 3 + clean_mean)
-        invalids = positives + negatives
-
-        cons[invalids] = np.nan
-
-        consumptions[row] = cons
-
-        df['consumptions'] = consumptions
-        return df
-
-
 if __name__ == '__main__':
     db = connectDB()
     
@@ -104,8 +83,6 @@ if __name__ == '__main__':
         cons = pd.concat([pd.DataFrame({'day': days, 'weekday': weekdays}), cons], axis=1)
         cons = cons.set_index(['day'])
         cons.insert(0, 'building_id', counter_id)
-
-        cons = cleanData(cons)
 
         consumptions = consumptions.append(cons)
         bar.next()
