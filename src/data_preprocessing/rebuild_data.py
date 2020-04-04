@@ -12,16 +12,24 @@ PROTOS_PATH = OUT_PATH + 'prototypesMEAN.zip'
 
 
 def normalize(x: np.array, mean: float, std: float) -> np.array:
+    if std == 0:
+        std = 1
     return (x - mean) / std
 
 def denormalize(x: np.array, mean: float, std:float) -> np.array:
+    if std == 0:
+        std = 1
     return x * std + mean
 
 def transform(x: np.array, y: np.array) -> np.array:
     y = np.asarray(y)
 
-    nans = np.isnan(y)          # NaN values
-    negatives = np.less(y, 0)   # Negative values
+    nans = np.isnan(y)      # NaN values
+
+    if not np.any(nans):    # If all are valid values, return the original
+        return y
+    elif np.all(nans):      # If all are invalid values, return the prototype
+        return x
 
     x_mean, x_std = np.mean(x), np.std(x)
     x_norm = normalize(x, x_mean, x_std)
@@ -31,7 +39,6 @@ def transform(x: np.array, y: np.array) -> np.array:
     y_norm = normalize(y, y_mean, y_std)
 
     y_norm[nans] = x_norm[nans]
-    y_norm[negatives] = x_norm[negatives]
 
     return denormalize(y_norm, y_mean, y_std)
 
@@ -60,12 +67,12 @@ if __name__ == '__main__':
             august = (date.month == 8)                      # August is an inactive month
             christmas = (date.month == 12 and date.day >= 23) or (date.month == 1 and date.day >= 6)    # Christmas holidays
 
-            inactive = (day_of_week or august or christmas)
+            y = df.loc[date, 'consumptions']
 
-            if inactive:
-                df['consumptions'].loc[date] = transform(mean_proto['consumptions'][(mean_proto['weekday'] == weekday) & (mean_proto['active'] == False)].iloc[0], df.loc[date, 'consumptions'])
+            if (day_of_week or august or christmas):
+                df['consumptions'].loc[date] = transform(mean_proto['consumptions'][(mean_proto['weekday'] == weekday) & (mean_proto['active'] == False)].iloc[0], y)
             else:
-                df['consumptions'].loc[date] = transform(mean_proto['consumptions'][(mean_proto['weekday'] == weekday) & (mean_proto['active'] == True)].iloc[0], df.loc[date, 'consumptions'])
+                df['consumptions'].loc[date] = transform(mean_proto['consumptions'][(mean_proto['weekday'] == weekday) & (mean_proto['active'] == True)].iloc[0], y)
 
             mean = np.sum(df.loc[date, 'consumptions']) # Calculate daily consumption
 
