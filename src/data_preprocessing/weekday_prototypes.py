@@ -23,7 +23,7 @@ def dropNan(df: pd.DataFrame) -> pd.DataFrame:
 def get_threshold(df: pd.DataFrame) -> float:
     df['daily'] = df['consumptions'].apply(np.sum)
 
-    return df['daily'].mean() + 2 * df['daily'].std()
+    return df['daily'].mean() + df['daily'].std()
 
 
 def get_prototype(df: pd.DataFrame, counter_id: int, weekday: int, active: bool, type: str = 'mean') -> pd.DataFrame:
@@ -59,6 +59,7 @@ if __name__ == '__main__':
         mean_proto = mean_proto.append(get_prototype(sundays, counter_id, 6, False, type='mean'))
         std_proto = std_proto.append(get_prototype(sundays, counter_id, 6, False, type='std'))
         for i in range(0, 6):
+            # i = 5
             df = clean_df[clean_df['weekday'] == i]
             df['daily'] = df['consumptions'].apply(np.sum)   # Get daily consumptions
             
