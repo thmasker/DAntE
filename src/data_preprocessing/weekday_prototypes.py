@@ -31,7 +31,6 @@ if __name__ == '__main__':
     mean_proto, std_proto = pd.DataFrame(), pd.DataFrame()
     for d in range(0, 7):
         df = raw_df[raw_df['weekday'] == d]
-        df['daily'] = df['consumptions'].apply(np.nansum)
 
         for a in (True, False):
             df_a = df[df['active'] == a]

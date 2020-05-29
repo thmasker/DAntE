@@ -28,7 +28,7 @@ def get_consumption_type(df: pd.DataFrame, n: int) -> List[pd.DataFrame]:
 
 
 if __name__ == '__main__':
-    raw = pd.read_pickle(OUT_PATH + 'raw_consumptions.zip')
+    raw = pd.read_csv(OUT_PATH + 'raw_consumptions.csv', index_col='day', converters={'consumptions': lambda x: list(map(float, x.strip('[]').split()))}, na_values='nan', parse_dates=True, infer_datetime_format=True)
     
     clean_df, buildings_df = pd.DataFrame(), pd.DataFrame()
     for counter_id in raw['building_id'].unique():
