@@ -12,6 +12,7 @@ from progress.bar import Bar
 OUT_PATH = 'C:/Users/thmas/OneDrive - Universidad de Castilla-La Mancha/Informática/TFG/out/'
 
 DB_COUNTERRAW = 'CounterRawConsumption'
+DB_COUNTERINFO = 'CounterInfo'
 START_DAY = 5   # Day starts at 5:00 am
 
 
@@ -76,7 +77,7 @@ def cleanData(df: pd.DataFrame) -> pd.DataFrame:
 if __name__ == '__main__':
     db = connectDB()
     
-    counters = pickle.load(open(OUT_PATH + 'counter_ids.pickle', 'rb'))
+    counters = list(db[DB_COUNTERINFO].distinct('counter_id'))
 
     bar = Bar('Collecting data', max=len(counters))
     consumptions = pd.DataFrame()
@@ -107,8 +108,8 @@ if __name__ == '__main__':
         cons.insert(0, 'building_id', counter_id)
 
         consumptions = consumptions.append(cleanData(cons))
-
+        
         bar.next()
     bar.finish()
 
-    consumptions.to_pickle(OUT_PATH + 'raw_consumptions.zip', compression='zip')
+    consumptions.to_csv(OUT_PATH + 'raw_consumptions.csv')
