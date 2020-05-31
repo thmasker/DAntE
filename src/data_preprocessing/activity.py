@@ -29,6 +29,12 @@ def get_consumption_type(df: pd.DataFrame, n: int) -> List[pd.DataFrame]:
 
 if __name__ == '__main__':
     raw = pd.read_csv(OUT_PATH + 'raw_consumptions.csv', index_col='day', converters={'consumptions': lambda x: list(map(float, x.strip('[]').split()))}, na_values='nan', parse_dates=True, infer_datetime_format=True)
+
+    days = raw.index.drop_duplicates().tolist()
+
+    raw.insert(1, 'weekday', -1)
+    for day in days:
+        raw.loc[day, 'weekday'] = day.weekday()
     
     clean_df, buildings_df = pd.DataFrame(), pd.DataFrame()
     for counter_id in raw['building_id'].unique():
