@@ -1,0 +1,21 @@
+#inputGroupFile {
+    background-color: #1786FF;
+}
+
+#footer {
+    padding: 0;
+}
+
+.error {
+    background-color: red;
+    float: left;
+    text-align: center;
+    width: auto;
+}
+
+.info {
+    background-color: greenyellow;
+    float: left;
+    text-align: center;
+    width: auto;
+}
