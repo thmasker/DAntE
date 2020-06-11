@@ -8,14 +8,14 @@
 
 .error {
     background-color: red;
-    float: left;
+    float: inherit;
     text-align: center;
     width: auto;
 }
 
 .info {
     background-color: greenyellow;
-    float: left;
+    float: inherit;
     text-align: center;
     width: auto;
 }
