@@ -15,13 +15,13 @@
         {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="{{ category }}">{{ message }}</div>
+                    <div id="flash" class="{{ category }}">{{ message }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
 
         <br>
-        <a href="{{ url_for('auth_bp.register') }}">Not registered yet?</a>
+        <a href="{{ url_for('auth_bp.signup') }}">Not registered yet?</a>
         <br><br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>

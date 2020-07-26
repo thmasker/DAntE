@@ -10,7 +10,6 @@ body {
   align-items: center;
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #f5f5f5;
 }
 
 .form-signin {
@@ -41,4 +40,43 @@ body {
   margin-bottom: -1px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+#flash.error {
+    background-color: red;
+    float: inherit;
+    text-align: center;
+    width: auto;
+}
+
+#flash.info {
+    background-color: greenyellow;
+    float: inherit;
+    text-align: center;
+    width: auto;
+}
+
+.btn {
+    color: black;
+    background-color: #ff9c1b;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+    color: black;
+    background-color: #ff9c1b;
+    border-color: #ff9c1b;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+    color: black;
+    background-color: #ff9c1b;
+    border-color: #ff9c1b;
+}
+
+.btn-primary:hover {
+    color: black;
+    background-color: #ff9c1b;
+    border-color: #ff9c1b;
 }

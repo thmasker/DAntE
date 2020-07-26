@@ -1,21 +1,22 @@
-#inputGroupFile {
-    background-color: #1786FF;
-}
-
 #footer {
+    bottom: 0;
     padding: 0;
 }
 
 .error {
     background-color: red;
-    float: inherit;
+    float: left;
     text-align: center;
     width: auto;
 }
 
 .info {
     background-color: greenyellow;
-    float: inherit;
+    float: left;
     text-align: center;
     width: auto;
+}
+
+#spinner {
+    visibility: hidden;
 }

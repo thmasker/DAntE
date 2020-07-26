@@ -1,5 +1,6 @@
 from os import environ, path
 from dotenv import load_dotenv
+from datetime import timedelta
 
 basedir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(basedir, '.env'))
@@ -11,9 +12,10 @@ class Config:
     SESSION_COOKIE_NAME = environ.get('SESSION_COOKIE_NAME')
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
-    UPLOAD_FOLDER = './uploads'
     MAX_CONTENT_LENGTH = 500 * 1024 * 1024
     MONGO_DBNAME = 'dante'
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=3)
+    DATA_DIR = 'data'
 
 
 class ProdConfig(Config):
