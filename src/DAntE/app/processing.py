@@ -306,6 +306,6 @@ def applySmooth(df, rolling_window, times):
     '''
 
     for _ in range(times):
-        df = df.rolling(rolling_window, min_periods=1).mean()
+        df = df.rolling(rolling_window, min_periods=1, center=True).mean()
 
     return df
