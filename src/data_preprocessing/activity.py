@@ -10,7 +10,7 @@ import pickle
 OUT_PATH = 'C:/Users/thmas/OneDrive - Universidad de Castilla-La Mancha/Informática/TFG/out/'
 
 
-def get_consumption_type(df: pd.DataFrame, n: int) -> List[pd.DataFrame]:
+def get_consumption_type(df: pd.DataFrame, n: int) -> pd.DataFrame:
     increment = 100 / n
 
     types = []
@@ -27,8 +27,28 @@ def get_consumption_type(df: pd.DataFrame, n: int) -> List[pd.DataFrame]:
     return pd.concat(types)
 
 
+def dropNan(df: pd.DataFrame) -> pd.DataFrame:
+    nan_rows = []
+    
+    for i in df.index:
+        if True in np.isnan(df['consumptions'].loc[i]):
+            nan_rows.append(i)
+            
+    return df.drop(index=nan_rows)
+
+
 if __name__ == '__main__':
     raw = pd.read_csv(OUT_PATH + 'raw_consumptions.csv', index_col='day', converters={'consumptions': lambda x: list(map(float, x.strip('[]').split()))}, na_values='nan', parse_dates=True, infer_datetime_format=True)
+
+    days = raw.index.drop_duplicates().tolist()
+
+    raw.insert(1, 'weekday', -1)
+    for day in days:
+        raw.loc[day, 'weekday'] = day.weekday()
+
+    raw.reset_index(inplace=True)
+    raw = dropNan(raw)
+    raw.set_index('day', inplace=True)
     
     clean_df, buildings_df = pd.DataFrame(), pd.DataFrame()
     for counter_id in raw['building_id'].unique():

@@ -1,0 +1,22 @@
+#footer {
+    bottom: 0;
+    padding: 0;
+}
+
+.error {
+    background-color: red;
+    float: left;
+    text-align: center;
+    width: auto;
+}
+
+.info {
+    background-color: greenyellow;
+    float: left;
+    text-align: center;
+    width: auto;
+}
+
+#spinner {
+    visibility: hidden;
+}

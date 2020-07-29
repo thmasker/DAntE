@@ -99,11 +99,7 @@ if __name__ == '__main__':
 
         days = df['day'].drop_duplicates().tolist()
 
-        weekdays = []
-        for day in days:
-            weekdays.append(day.weekday())
-
-        cons = pd.concat([pd.DataFrame({'day': days, 'weekday': weekdays}), cons], axis=1)
+        cons = pd.concat([pd.DataFrame({'day': days}), cons], axis=1)
         cons = cons.set_index(['day'])
         cons.insert(0, 'building_id', counter_id)
 

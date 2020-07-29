@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block layout %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+<div class="col-lg text-center">
+    <form class="form-signin" action="{{ url_for('auth_bp.signup') }}" method="POST">
+        <svg class="bi bi-lightning-fill" width="72" height="72" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/>
+        </svg>
+        <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span for="email" class="input-group-text">Email</span>
+            </div>
+            <input type="email" id="email" name="email" class="form-control" placeholder="admin@dante.com" required autofocus>
+        </div>
+        
+        <br>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span for="password" class="input-group-text">Password</span>
+            </div>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div id="flash" class="{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <br>
+        <a href="{{ url_for('auth_bp.login') }}">Already registered?</a>
+        <br><br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    </form>
+</div>
+{% endblock %}
